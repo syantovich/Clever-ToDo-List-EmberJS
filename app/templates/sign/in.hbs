@@ -1,11 +1,6 @@
 {{page-title "SignIn"}}
 <div class="sign ">
   <div class='center around'>
-    <BsForm @formLayout="vertical" @onSubmit={{this.userStore$.login}} @model={{this}} as |form|>
-      <form.element @controlType="email" @label="Email" @placeholder="Email" @property="email"  />
-      <form.element @controlType="password" @label="Password" @placeholder="Password" @property="password"/>
-      <form.submitButton>Log in with password</form.submitButton>
-      <button type="button" class="btn btn-primary" {{on "click" this.userStore$.googleAuth}}>Sign in with Google</button>
-    </BsForm>
+    <LogInForm/>
   </div>
 </div>

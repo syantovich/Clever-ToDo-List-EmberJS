@@ -22,6 +22,17 @@ export default class UserStore$Service extends Service {
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
       this.user = result.user;
+      this.firebaseApp.setDoc();
+    } catch (e) {}
+  }
+
+  @action
+  async signup({ email, password, name }) {
+    const auth = await this.firebaseApp.auth();
+
+    console.log({ email, password });
+    try {
+      const result = await auth.createUserWithEmailAndPassword(email, password);
     } catch (e) {}
   }
 
@@ -31,8 +42,10 @@ export default class UserStore$Service extends Service {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       const result = await auth.signInWithPopup(provider);
-      this.user = result;
-    } catch (e) {}
+      this.user = result.user;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   @action

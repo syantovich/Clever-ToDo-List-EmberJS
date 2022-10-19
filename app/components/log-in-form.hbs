@@ -1,0 +1,6 @@
+<BsForm @formLayout="vertical" @onSubmit={{this.userStore$.login}} @model={{this}} as |form|>
+  <form.element @controlType="email" @label="Email" @property="email" />
+  <form.element @controlType="password" @label="Password" @property="password" @helpText="Minimum 6 characters" />
+  <form.submitButton>Log in with password</form.submitButton>
+  <button type="button" class="btn btn-primary" {{on "click" this.userStore$.googleAuth}}>Sign in with Google</button>
+</BsForm>
