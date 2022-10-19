@@ -1,0 +1,7 @@
+<div class="body">
+  <header>
+  <NavBar @brand="ToDo List"/></header>
+  <div class="container main">{{outlet}}</div>
+  <h2>{{ this.userStore$.user.email }}</h2>
+  <button type="button" {{on "click" this.userStore$.logout}}>logout</button>
+</div>

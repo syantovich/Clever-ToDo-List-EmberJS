@@ -1,0 +1,12 @@
+{{page-title "SignUp"}}
+<div class="sign ">
+  <div class='center around'>
+    <BsForm @formLayout="vertical" @onSubmit={{this.userStore$.login}} @model={{this}} as |form|>
+      <form.element @controlType="email" @label="Email" @placeholder="Email" @property="email" />
+      <form.element @controlType="password" @label="Password" @placeholder="Password" @property="password" />
+      <form.element @controlType="password" @label="Confirm password" @placeholder="Confirm password" @property="passwordConfirmation" />
+      <form.submitButton>Sign Up</form.submitButton>
+      <button type="button" class="btn btn-primary">Sign up with Google</button>
+    </BsForm>
+  </div>
+</div>

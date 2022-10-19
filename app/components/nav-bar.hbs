@@ -1,0 +1,26 @@
+<nav class='menu d-flex justify-content-between align-items-center mx-5'>
+  <LinkTo @route='index' class='menu-index navbar-brand'>
+    <h1>{{@brand}}</h1>
+  </LinkTo>
+  <div class='links'>
+    {{#if this.userStore$.isAuth}}
+      <LinkTo @route='profile' class='menu-signUp'>
+        <button class='btn btn-primary' type="button">
+          Profile
+        </button>
+      </LinkTo>
+    {{else}}
+      <LinkTo @route='sign.in' class='me-3'>
+        <button class='btn btn-primary' type="button">
+          Sign in
+        </button>
+      </LinkTo>
+      <LinkTo @route='sign.up' class='menu-signUp'>
+        <button class='btn btn-primary' type="button">
+          Sing up
+        </button>
+      </LinkTo>
+    {{/if}}
+
+  </div>
+</nav>

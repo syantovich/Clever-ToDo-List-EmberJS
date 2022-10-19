@@ -1,0 +1,40 @@
+@import "signin";
+
+body.ember-application{
+  height: 100vh;
+}
+$primary: #ff611a;
+$secondary: #a94212;
+$orange:#fd7e14;
+$theme-colors: (
+  "primary": $orange,
+);
+
+$colors: (
+  "orange":     $orange,
+);
+.btn.btn-primary{
+  background-color: $primary;
+}
+a{
+    text-decoration: none!important;
+
+    &.active button{
+        background-color: $secondary!important;
+    }
+}
+.body{
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+}
+.main{
+  flex-grow: 1;
+}
+header{
+  border: $primary 2px solid;
+}
+
+
+@import "ember-bootstrap/bootstrap";
