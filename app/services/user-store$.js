@@ -5,8 +5,10 @@ import { inject } from '@ember/service';
 import firebase from 'firebase';
 
 export default class UserStore$Service extends Service {
+  @inject store;
   @inject session;
   @inject firebaseApp;
+  @inject db;
 
   @tracked user = this.session.data.authenticated.user;
 
@@ -18,22 +20,29 @@ export default class UserStore$Service extends Service {
   async login({ email, password }) {
     const auth = await this.firebaseApp.auth();
 
-    console.log({ email, password });
     try {
       const result = await auth.signInWithEmailAndPassword(email, password);
       this.user = result.user;
-      this.firebaseApp.setDoc();
-    } catch (e) {}
+      this.db.getUserInfoByEmail(email);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   @action
   async signup({ email, password, name }) {
     const auth = await this.firebaseApp.auth();
 
-    console.log({ email, password });
     try {
       const result = await auth.createUserWithEmailAndPassword(email, password);
-    } catch (e) {}
+      this.db.setUserInfo({
+        email,
+        uid: result.user.uid,
+        name,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   @action

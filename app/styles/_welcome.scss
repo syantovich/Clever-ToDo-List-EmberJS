@@ -1,0 +1,31 @@
+.wrapper_welcome {
+  width: 100%;
+  height: 100%;
+  padding: 50px;
+  box-sizing: border-box;
+}
+.wrapper_welcome .text {
+  font-size: 2rem;
+  width: 50%;
+  text-align: center;
+  color: #8e271f;
+}
+.wrapper_welcome button {
+  width: 120px;
+  height: 40px;
+  background: #ff611a;
+  border: 0px;
+  border-radius: 40px;
+  color: #8e271f;
+}
+.wrapper_welcome button:hover {
+  background-color: #d00101;
+  color: white;
+  border: white;
+}
+.wrapper_welcome .img {
+  width: 60%;
+}
+.wrapper_welcome .img img {
+  width: 100%;
+}

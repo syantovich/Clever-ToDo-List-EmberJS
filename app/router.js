@@ -12,4 +12,5 @@ Router.map(function () {
     this.route('up');
   });
   this.route('profile');
+  this.route('plans');
 });

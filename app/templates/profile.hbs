@@ -1,2 +1,18 @@
 {{page-title "Profile"}}
-{{outlet}}
+<div class="wrapper-profile">
+  <div class="card">
+    <div class="row">
+      <div class="col-sm-3"><h6>Name</h6></div>
+      <div class="col-sm-9">{{model.name}}</div>
+      <div class="col-sm-3"><h6>Email</h6></div>
+      <div class="col-sm-9">{{model.email}}</div>
+      <div class="col-sm-3"><p><small>UID</small></p></div>
+      <div class="col-sm-9">{{model.uid}}</div>
+    </div>
+    <div>
+      <BsButton @type="primary" class="w-100" @icon="glyphicon glyphicon-download" @onClick={{this.userStore$.logout}}>
+        Logout
+      </BsButton>
+    </div>
+  </div>
+</div>

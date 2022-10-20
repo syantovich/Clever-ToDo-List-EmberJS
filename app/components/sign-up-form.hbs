@@ -1,4 +1,4 @@
-<BsForm @formLayout="vertical" @onSubmit={{this.userStore$.login}} @model={{this}} as |form|>
+<BsForm @formLayout="vertical" @onSubmit={{this.userStore$.signup}} @model={{this}} as |form|>
   <form.element @controlType="name" @label="Name" @property="name" />
   <form.element @controlType="email" @label="Email" @property="email" />
   <form.element @controlType="email" @label="Confirm email" @property="emailConfirmation" />
