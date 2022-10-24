@@ -9,6 +9,7 @@ export default class UserStore$Service extends Service {
   @inject session;
   @inject firebaseApp;
   @inject db;
+  @inject loadingStore$;
 
   @tracked user = this.session.data.authenticated.user;
 
@@ -18,6 +19,7 @@ export default class UserStore$Service extends Service {
 
   @action
   async login({ email, password }) {
+    this.loadingStore$.setLoading(true);
     const auth = await this.firebaseApp.auth();
 
     try {
@@ -27,10 +29,12 @@ export default class UserStore$Service extends Service {
     } catch (e) {
       console.log(e);
     }
+    this.loadingStore$.setLoading(false);
   }
 
   @action
   async signup({ email, password, name }) {
+    this.loadingStore$.setLoading(true);
     const auth = await this.firebaseApp.auth();
 
     try {
@@ -43,10 +47,12 @@ export default class UserStore$Service extends Service {
     } catch (e) {
       console.log(e);
     }
+    this.loadingStore$.setLoading(false);
   }
 
   @action
   async googleAuth() {
+    this.loadingStore$.setLoading(true);
     const auth = await this.firebaseApp.auth();
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
@@ -55,6 +61,7 @@ export default class UserStore$Service extends Service {
     } catch (e) {
       console.log(e);
     }
+    this.loadingStore$.setLoading(false);
   }
 
   @action

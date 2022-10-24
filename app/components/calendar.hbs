@@ -1,0 +1,6 @@
+{{did-insert this.plansStore$.addDays}}
+<div class="d-flex wrapper_calendar" {{on "scroll" this.onScroll}}>
+    {{#each this.plansStore$.days as |day|}}
+        <Calendar::Day @day={{day}} @setSelected={{this.plansStore$.setSelected}} @key={{day.date}}/>
+    {{/each}}
+</div>

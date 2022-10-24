@@ -1,5 +1,10 @@
 <div class="body">
   <header>
   <NavBar @brand="ToDo List"/></header>
-  <div class="container main">{{outlet}}</div>
+  <div class="container main">
+    {{#if this.loadingStore$.isLoading}}
+      <Spiner/>
+    {{/if}}
+    {{outlet}}
+  </div>
 </div>

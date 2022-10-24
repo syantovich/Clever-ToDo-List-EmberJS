@@ -1,2 +1,12 @@
 {{page-title "Plans"}}
-{{outlet}}
+<Calendar/>
+<div class="wrapper_plans_tabs">
+  <BsTab as |tab|>
+    <tab.pane @title="Plane">
+     <PlanOnDay/>
+    </tab.pane>
+    <tab.pane @title="Add">
+      <AddPlanForm @buttonName="Add"/>
+    </tab.pane>
+  </BsTab>
+</div>

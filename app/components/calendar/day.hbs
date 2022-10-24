@@ -1,0 +1,10 @@
+  <div class="card_day d-flex flex-column justify-content-center align-content-center day_element ms-3 {{if @day.isSelected "selected"}}" {{on "click" (fn @setSelected @day.date)}}>
+    <div class='icons_important'>
+          <div class='{{if @day.importance.isNotImportant  this.valueNotImportant }} circle_important'/>
+          <div class='{{if @day.importance.isImportant  this.valueImportant }} circle_important'/>
+          <div class='{{if @day.importance.isVeryImportant  this.valueVeryImportant }} circle_important'/>
+    </div>
+    <div>{{this.day}}</div>
+    <div class="day_of_week {{if this.isDayOf "day_of"}}">{{this.dayOfWeek}}</div>
+    <div class="month">{{this.month}}</div>
+  </div>

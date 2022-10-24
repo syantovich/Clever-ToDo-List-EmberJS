@@ -1,0 +1,38 @@
+.day_element {
+  min-width:70px;
+  min-height: 50px;
+  color: black;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+
+  & .day_of_week{
+    font-weight: bold;
+  }
+
+  & .day_of{
+    color: #a83411;
+  }
+}
+.selected {
+  background-color: black;
+  color: white;
+}
+.circle_important {
+  width:7px;
+  height: 7px;
+  border-radius: 100%;
+}
+.icons_important {
+  display: flex;
+  justify-content: space-between;
+}
+.wrapper_calendar{
+  width:100%;
+  margin-top:20px;
+  overflow-x: scroll;
+  &::-webkit-scrollbar { height: 0; }
+}

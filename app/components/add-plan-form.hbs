@@ -1,0 +1,7 @@
+<BsForm @formLayout="vertical" @onSubmit={{this.db.addPlan}} @model={{this}} as |form|>
+  <form.element @controlType="name" @label="Name" @property="name" />
+  <form.element @controlType="textarea" @label="Description" @property="description" />
+  <form.element @controlType="radio" @label="Importance" @property="importance" @options={{this.radioImportance}} @optionLabelPath="label" />
+  <form.element @controlType="date" @label="Date" @property="date" />
+  <form.submitButton>{{@buttonName}}</form.submitButton>
+</BsForm>

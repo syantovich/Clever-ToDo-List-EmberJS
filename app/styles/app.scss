@@ -1,6 +1,10 @@
 @import "signin";
 @import "profile";
 @import "welcome";
+@import "calendar";
+@import "plans";
+@import "spiner";
+@import "plan-on-day";
 
 body.ember-application{
   height: 100vh;
@@ -37,6 +41,25 @@ a{
 header{
   border: $primary 2px solid;
 }
+a.nav-link{
+  color:$primary
+}
+.important {
+  background-color: #f7c832;
+  border: 2px solid #f7c832;
+  fill: #f7c832;
+}
+.very_important {
+  background-color: #ff8c2c;
+  border: 2px solid #ff8c2c;
+  fill: #ff8c2c;
+}
+.not_matter {
+  background-color: #1aaf63;
+  border: 2px solid #1aaf63;
+  fill: #1aaf63;
+}
+
 
 
 @import "ember-bootstrap/bootstrap";

@@ -1,8 +1,14 @@
 import Service from '@ember/service';
 import { inject } from '@ember/service';
+import { processingDate } from '../data/processingDate';
+import { action } from '@ember/object';
+import { uid } from 'uid';
 
 export default class DbService extends Service {
   @inject store;
+  @inject userStore$;
+  @inject plansStore$;
+
   async getUserInfoByEmail(email) {
     const promiseId = await this.store.query('informations', {
       filter: { email },
@@ -11,9 +17,109 @@ export default class DbService extends Service {
     const userInfo = await this.store.find('informations', id);
     return userInfo;
   }
+
   async setUserInfo(info) {
     const record = await this.store.createRecord('informations', info);
     await record.save();
     return true;
+  }
+
+  createRecord = async ({ date, description, name, importance }) => {
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
+    const record1 = await this.store.createRecord('plans', {
+      month: month,
+      user: this.userStore$.user.email,
+      days: {
+        [day]: [
+          {
+            name,
+            description,
+            date,
+            importance,
+            isFinished: false,
+            uid: uid(32),
+          },
+        ],
+      },
+    });
+    record1.save();
+  };
+
+  getPlansInMonth = async (month) => {
+    const record = await this.store.query('plans', {
+      filter: {
+        month: month,
+        user: this.userStore$.user.email,
+      },
+    });
+    if (record.content.length) {
+      const updateRecord = await this.store.findRecord(
+        'plans',
+        record.content[0].id
+      );
+      return updateRecord.days;
+    } else {
+      return [];
+    }
+  };
+
+  addPlan = async ({ date, description, name, importance }) => {
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
+
+    const record = await this.store.query('plans', {
+      filter: {
+        month: month,
+        user: this.userStore$.user.email,
+      },
+    });
+    if (record.content.length) {
+      const updateRecord = await this.store.findRecord(
+        'plans',
+        record.content[0].id
+      );
+      if (!updateRecord.days[day]) {
+        updateRecord.days[day] = [];
+      }
+      updateRecord.days[day].push({
+        name,
+        description,
+        date,
+        importance,
+        isFinished: false,
+        uid: uid(32),
+      });
+      updateRecord.save();
+    } else {
+      this.createRecord({ name, description, date, importance });
+    }
+  };
+
+  async updateRecord(plan) {
+    const day = processingDate.getDay(new Date(plan.date));
+    const month = processingDate.toYearMont(new Date(plan.date));
+    const record = await this.store.query('plans', {
+      filter: {
+        month: month,
+        user: this.userStore$.user.email,
+      },
+    });
+
+    if (record.content.length) {
+      const updateRecord = await this.store.findRecord(
+        'plans',
+        record.content[0].id
+      );
+      console.log(updateRecord.days);
+      updateRecord.days[day] = updateRecord.days[day].map((e) => {
+        if (e.uid === plan.uid) {
+          return plan;
+        } else {
+          return e;
+        }
+      });
+      await updateRecord.save();
+    }
   }
 }
