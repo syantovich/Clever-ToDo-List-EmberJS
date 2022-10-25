@@ -1,0 +1,8 @@
+<BsModal as |Modal|>
+  <Modal.header @onClose={{@onClose}}>
+    <h4 class="modal-title"><i class="glyphicon glyphicon-alert"></i> Alert</h4>
+  </Modal.header>
+  <Modal.body>
+    <AddPlanForm @default={{this.default}} @isUpdate={{true}}/>
+  </Modal.body>
+</BsModal>

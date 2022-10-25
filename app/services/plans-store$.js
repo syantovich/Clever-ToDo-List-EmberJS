@@ -51,24 +51,10 @@ export default class PlansStoreService extends Service {
         isSelected:
           processingDate.getDateWithoutHour(date) ===
           processingDate.getDateWithoutHour(this.selected),
-        importance: {
-          isNotImportant: Object.values(this.plans[month][day]).some(
-            (e) => e.importance.value === importance[0].value
-          ),
-          isImportant: Object.values(this.plans[month][day]).some(
-            (e) => e.importance.value === importance[1].value
-          ),
-          isVeryImportant: Object.values(this.plans[month][day]).some(
-            (e) => e.importance.value === importance[2].value
-          ),
-        },
+        importance: this.getIsImportance(month, day),
       };
-      if (day == 21) {
-        console.log(elementToAdd.importance);
-      }
       addingDays.push(elementToAdd);
     }
-    console.log(addingDays);
 
     this.incNextMonth();
     this.setDays(this.getDays.concat(addingDays));
@@ -87,7 +73,6 @@ export default class PlansStoreService extends Service {
         return { ...e, isSelected: false };
       }
     });
-    console.log(day);
     this.selected = day;
   }
 
@@ -103,21 +88,60 @@ export default class PlansStoreService extends Service {
   setPlans(newPlans) {
     this.plans = newPlans;
   }
+
   @action
-  async updatePlan(plan) {
-    await this.db.updateRecord(plan);
+  async deletePlan(date, uid) {
+    await this.db.deletePlan(date, uid);
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
+    const newPlans = { ...this.plans };
+    newPlans[month] = { ...newPlans[month] };
+    newPlans[month][day] = this.plans[month][day].filter((e) => e.uid !== uid);
+    this.plans = newPlans;
+    this.updateImportance(date);
+  }
+
+  @action
+  async addPlan(plan) {
+    await this.db.addPlan(plan);
     const day = processingDate.getDay(new Date(plan.date));
     const month = processingDate.toYearMont(new Date(plan.date));
     const newPlans = { ...this.plans };
-    newPlans[month] = { ...newPlans[month] };
-    newPlans[month][day] = this.plans[month][day].map((e) => {
-      if (e.uid === plan.uid) {
-        return plan;
-      } else {
-        return e;
-      }
-    });
+    if (month in newPlans) {
+      newPlans[month] = { ...newPlans[month] };
+    } else {
+      newPlans[month] = {};
+    }
+    if (newPlans[month][day]) {
+      newPlans[month][day].push(plan);
+    } else {
+      newPlans[month][day] = [plan];
+    }
+    this.updateImportance(plan.date);
+
     this.plans = newPlans;
+  }
+  @action
+  async updatePlan(plan, oldDate) {
+    if (oldDate !== plan.date && oldDate) {
+      await this.deletePlan(oldDate, plan.uid);
+      this.addPlan(plan);
+    } else {
+      await this.db.updateRecord(plan);
+      const day = processingDate.getDay(new Date(plan.date));
+      const month = processingDate.toYearMont(new Date(plan.date));
+      const newPlans = { ...this.plans };
+      newPlans[month] = { ...newPlans[month] };
+      newPlans[month][day] = this.plans[month][day].map((e) => {
+        if (e.uid === plan.uid) {
+          return plan;
+        } else {
+          return e;
+        }
+      });
+      this.updateImportance(plan.date);
+      this.plans = newPlans;
+    }
   }
 
   @action
@@ -126,5 +150,52 @@ export default class PlansStoreService extends Service {
   }
   @action incNextMonth() {
     this.nextMonth = this.nextMonth + 1;
+  }
+
+  @action
+  getIsImportance(month, day) {
+    const result = {
+      isNotImportant: Object.values(this.plans[month][day]).some(
+        (e) => e.importance.value === importance[0].value
+      ),
+      isImportant: Object.values(this.plans[month][day]).some(
+        (e) => e.importance.value === importance[1].value
+      ),
+      isVeryImportant: Object.values(this.plans[month][day]).some(
+        (e) => e.importance.value === importance[2].value
+      ),
+    };
+    return result;
+  }
+
+  @action
+  updateImportance(date) {
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
+    try {
+      this.days = this.days.map((e) => {
+        if (processingDate.getDateWithoutHour(e.date) === date) {
+          const importance = this.getIsImportance(month, day);
+          return { ...e, importance };
+        } else {
+          return e;
+        }
+      });
+    } catch (e) {
+      console.log(e, 'тут ошибка');
+    }
+  }
+
+  @action
+  async submit(data) {
+    try {
+      if (data.attrs?.isUpdate) {
+        await this.updatePlan(data, data.default.date);
+      } else {
+        await this.addPlan(data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

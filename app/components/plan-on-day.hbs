@@ -1,6 +1,6 @@
 <div>
     {{#each this.infoPlan as |plan|}}
-      <div class="wrapper_plans_content ">
+      <div class="wrapper_plans_content " {{on "click" (fn this.openModal plan)}}>
         <div class='{{plan.importance.value}} element_of_plan
            {{if plan.isFinished 'opacity_element'}}'
         >
@@ -16,7 +16,7 @@
             {{/if}}
           </div>
 
-          <div class="wrapper_info">
+          <div class="wrapper_info" >
             <p class="fw-bold">{{plan.name}}</p>
             <p class="fw-lighter">{{plan.description}}</p>
           </div>
@@ -24,4 +24,8 @@
         </div>
       </div>
     {{/each}}
+  {{#if this.isModalOpen}}
+    <ModalPlan @onClose={{this.closeModal}} @plan={{this.isModalOpen}}/>
+  {{/if}}
+
 </div>

@@ -63,6 +63,27 @@ export default class DbService extends Service {
       return [];
     }
   };
+  deletePlan = async (date, uid) => {
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
+    const record = await this.store.query('plans', {
+      filter: {
+        month: month,
+        user: this.userStore$.user.email,
+      },
+    });
+
+    if (record.content.length) {
+      const updateRecord = await this.store.findRecord(
+        'plans',
+        record.content[0].id
+      );
+      updateRecord.days[day] = updateRecord.days[day].filter(
+        (e) => e.uid !== uid
+      );
+      await updateRecord.save();
+    }
+  };
 
   addPlan = async ({ date, description, name, importance }) => {
     const day = processingDate.getDay(new Date(date));
@@ -96,9 +117,9 @@ export default class DbService extends Service {
     }
   };
 
-  async updateRecord(plan) {
-    const day = processingDate.getDay(new Date(plan.date));
-    const month = processingDate.toYearMont(new Date(plan.date));
+  async updateRecord({ date, description, name, importance, isFinished, uid }) {
+    const day = processingDate.getDay(new Date(date));
+    const month = processingDate.toYearMont(new Date(date));
     const record = await this.store.query('plans', {
       filter: {
         month: month,
@@ -111,10 +132,9 @@ export default class DbService extends Service {
         'plans',
         record.content[0].id
       );
-      console.log(updateRecord.days);
       updateRecord.days[day] = updateRecord.days[day].map((e) => {
-        if (e.uid === plan.uid) {
-          return plan;
+        if (e.uid === uid) {
+          return { date, description, name, importance, isFinished, uid };
         } else {
           return e;
         }
